@@ -1,12 +1,18 @@
-const { Router } = require('express');
-// Importar todos los routers;
-// Ejemplo: const authRouter = require('./auth.js');
-
-
+const { Router } = require('express');  
+const pokemonsRoutes = require('./pokemons.js');
+const typesRoutes = require('./types.js');
 const router = Router();
+const { Type } = require('../db.js');
+
 
 // Configurar los routers
-// Ejemplo: router.use('/auth', authRouter);
+router.use('/pokemons', pokemonsRoutes);
+router.use('/types', typesRoutes);
 
+// aca va landing page que redirige a home
+router.get('/', async function(req, res) {
+    
+    res.send("Wwelcome! ");
+});
 
 module.exports = router;
