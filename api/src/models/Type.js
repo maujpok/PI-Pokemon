@@ -7,8 +7,8 @@ module.exports = (sequealize) => {
             allowNull: false
         }
     }, {
-        timestamps: true,
-        createdAt: false,
-        updatedAt: true
+        timestamps: false,
+        // createdAt: false,
+        // updatedAt: true
     })
 };

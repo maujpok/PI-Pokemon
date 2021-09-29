@@ -12,9 +12,12 @@ module.exports = (sequelize) => {
       primaryKey: true
     },
     name: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: false,
-      // unique: true,
+      unique: true,
+      set(value) {
+        this.setDataValue('name', value.toLowerCase());
+      },
       validate: {
         is: /^[a-z]+$/i
       }
@@ -31,7 +34,7 @@ module.exports = (sequelize) => {
     speed: {
       type: DataTypes.INTEGER,
     },
-    heigth: {
+    height: {
       type: DataTypes.INTEGER,
     },
     weight: {
@@ -40,6 +43,8 @@ module.exports = (sequelize) => {
     img: {
       type: DataTypes.JSON
     }
+  }, {
+    timestamps: false
   })
 };
 
