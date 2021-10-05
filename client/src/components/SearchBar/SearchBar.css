@@ -1,0 +1,22 @@
+.searchbar {
+    background-color: grey;
+    align-items: center;
+    display: flex;
+    height: 3rem;
+    justify-content: space-evenly;
+    position: relative;
+}
+
+.search-input {
+    border-radius: .5rem;
+    border: none;
+    height: 1.5rem;
+    margin: 5px;
+}
+
+.find {
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    width: 33%;
+}

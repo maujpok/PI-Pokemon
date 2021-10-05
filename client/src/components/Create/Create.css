@@ -1,0 +1,25 @@
+form {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.btn {
+    color: black;
+    background-color: steelblue;
+    border-radius: 0.5rem;
+    border-width: 1px;
+    margin-top: 20px;
+    width: 15%;
+    font-size: 100%;
+}
+
+#form{
+    border-radius: .25rem;
+    border: none;
+    height: 2rem;
+    background-color: linen;
+    
+}

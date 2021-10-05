@@ -1,34 +1,24 @@
 import React from "react";
 import { Route, Switch } from "react-router";
-import Landing from './components/Landing';
-import AddPokemon from "./components/AddPokemon";
-import GetApi from "./components/GetApi";
-import NavBar from './components/NavBar';
-// import Home from "./components/Home";
 import './App.css';
+import Landing from "./components/Landing/Landing";
+import Home from "./components/Home/Home";
+import NavBar from "./components/NavBar/NavBar";
+import Create from "./components/Create/Create";
+import Details from "./components/Details/Details";
 
-
-// function App() {
-//   return (
-//     <React.Fragment>
-//       <Route exact path="/" component={Landing} />
-//       {/* <Route path="/add" component={AddPokemon} />
-//       <Route path='/' component={NavBar}/>
-//       <Route path="/pokemons" component={MainPage} />
-//       <Route path="/pokemons/:id" component={DetailPage} />
-//       <Route path="/types" component={Types} /> */}
-//     </React.Fragment>
-//   );
-// }
 
 export default function App() {
   return (
     <div className='App'>
+      <NavBar/>
       <Switch>
-        <Route exact path='/' component= {Landing} />
-        <Route path='/' component={NavBar} />
-        <Route path='/pokemons' component= {GetApi} />
-        <Route path='/add' component={AddPokemon} />
+        <Route exact path='/'><Landing/></Route>
+        <Route path='/home'><Home/></Route>
+        <Route exact path='/create'> <Create/></Route>
+        <Route 
+        path='/:name'
+        render={({match}) => <Details name={match.params.name}/>}/>
       </Switch>
     </div>
   )
