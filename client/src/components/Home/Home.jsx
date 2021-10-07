@@ -1,6 +1,6 @@
 import React from "react";
 // import { Link } from "react-router-dom";
-import SearchBar from "../SearchBar/SearchBar";
+// import SearchBar from "../SearchBar/SearchBar";
 import Paginator from "../Paginator/Paginator";
 import ShowAll from "../ShowAll/ShowAll";
 import './Home.css';
@@ -15,6 +15,7 @@ export default function Home(){
         </div>
         <div>
             <Paginator />
-        </div></>
+        </div>
+        </>
     )
 };

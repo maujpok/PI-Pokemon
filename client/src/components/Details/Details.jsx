@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
 import { getName } from "../../actions/actions";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./Details.css";
 
-function Details ({name, loaded, getName}) {
+export default function Details ({name}) {
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        getName(name)
-    }, [getName, name]);
+        dispatch(getName(name))
+    }, [dispatch, name]);
 
-    console.log(loaded)
+    const loaded = useSelector((state) => state.pokemonLoaded)
     
-    return (
+    return(
         <div id='general'>
             <h2>Pokemon Details Component</h2>
             <div className='container'>
@@ -22,6 +24,10 @@ function Details ({name, loaded, getName}) {
                     <div id='item'>
                         <span>Name</span>
                         <h4>{loaded.name}</h4>
+                    </div>
+                    <div id='item'>
+                        <span>Id</span>
+                        <h4>{loaded.id}</h4>
                     </div>
                     <div id='item'>
                         <span>HP</span>
@@ -56,11 +62,3 @@ function Details ({name, loaded, getName}) {
         </div>
     )
 };
-
-const mapStateToProps = (state) => {
-    return {
-        loaded: state.pokemonLoaded
-    }
-};
-
-export default connect(mapStateToProps, {getName})(Details);

@@ -40,3 +40,7 @@
     align-items: center;
     width: 5rem;
 }
+
+h4{
+    text-transform: capitalize;
+}

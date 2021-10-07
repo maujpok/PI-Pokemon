@@ -1,23 +1,59 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import './Create.css';
-import { createPoke } from "../../actions/actions";
 import {connect} from "react-redux";
+import { getTypes, sendData } from "../../actions/actions";
+import { createJson, orderByName } from "../../helpers";
+
 
 const newPokemon = {
-    name: '', hp: '', attack: '', defense: '', speed: '', height: '', weight: ''
+    name: "",
+    hp: undefined,
+    attack: undefined,
+    defense: undefined,
+    speed: undefined,
+    height: undefined,
+    weight: undefined,
+    types: undefined
 };
 
-function Create ({createPoke}) {
-const [Input, setInput] = useState(newPokemon);
+function Create ({pokemonsTypes, getTypes, sendData}) {
 
-function handleSubmit (e) {
-    e.preventDefault();
-    createPoke(Input);
-}
+const [Input, setInput] = useState(newPokemon);
+const [_types, setTypes] = useState([]);
+
+useEffect(() => {
+    getTypes()
+    // console.log(pokemonsTypes)
+}, [getTypes]);
+
+orderByName(pokemonsTypes);
+
 
 function inputChange (e) {
     setInput({...Input, [e.target.name]: e.target.value});
+};
+
+function handleChange(e) {
+    let value = e.target.value;
+    let valueNum = parseInt(value);
+    _types.includes(valueNum) ?
+    setTypes(_types.filter(e => e !== valueNum))
+    :
+    setTypes([..._types, parseInt(e.target.value)])
+};
+
+let redir = () => {
+    window.location.href = `/${Input.name.toLowerCase()}`;
 }
+
+function handleSubmit (e) {
+    e.preventDefault()
+    sendData(createJson(Input, _types))
+    setInput(newPokemon);
+    // handleChange(e)
+    alert("Your Pokemons now lives! Come to see it");
+    redir();
+};
 
 return (
     <>
@@ -32,7 +68,8 @@ return (
                         type='text'
                         placeholder='enter name...'
                         value={Input.name}
-                        onChange={inputChange} />
+                        onChange={inputChange}
+                        required />
 
                     <label>HP</label>
                     <input
@@ -88,9 +125,24 @@ return (
                         value={Input.weight}
                         onChange={inputChange} />
 
-                    <label>Types</label>
-                    <option>"Table"</option>
-                
+                    <div id='container'>
+                        <b>Select type/s</b>
+                        <div id='types'>
+                        {
+                            pokemonsTypes.map(e => (
+                                <div key={e.id} id='unit'>
+                                    <input
+                                    type="checkbox"
+                                    value={e.id}
+                                    onClick={handleChange}
+                                    />
+                                    <span id='names'>{e.name}</span>
+                                </div>
+                            ))
+                        }
+                        </div>
+                    </div>  
+                    
                     <button 
                     className='btn'
                     type='submit'
@@ -100,4 +152,11 @@ return (
     )
 };
 
-export default connect (null, {createPoke})(Create);
+
+const mapStateToProps = (state) => {
+    return {
+        pokemonsTypes: state.types
+    }
+};
+
+export default connect (mapStateToProps, {getTypes, sendData})(Create);

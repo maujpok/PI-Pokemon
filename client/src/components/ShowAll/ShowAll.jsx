@@ -15,6 +15,7 @@ function ShowAll({pokemons, fetchApi}) {
         {pokemons.map(e => 
             <Pokemon
                 key={e.id}
+                id={e.id}
                 name={e.name}
                 types={e.types}
                 img={e.img}/>

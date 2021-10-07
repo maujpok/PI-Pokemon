@@ -7,8 +7,8 @@ export default function Pokemon({id, img, name, types}) {
     return (
         <div key={id} className='pokemoncard'>
             <Link to={`/${name}`}>
-            <p className='p'>{name}</p>
             <img src={img} alt='img' className='img'/>
+            <p className='p'>{name}</p>
             <p className='p'>{types}</p>
             </Link>
         </div>

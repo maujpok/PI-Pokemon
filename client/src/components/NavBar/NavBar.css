@@ -5,12 +5,24 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-
 }
 
-p {
+#p {
     margin-top: 10px;
     padding: 5%;
+    text-decoration: none;
+    color: steelblue;
+    background-color: white;
+    margin-right: 1rem;
+    border-radius: .5rem;
+    justify-content: center;
+    align-items: center;
+    font-family: cursive;
+}
+
+#p:hover{
+    background-color:orange;
+    color: white;
 }
 
 .links {

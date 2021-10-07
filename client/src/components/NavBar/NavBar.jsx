@@ -12,7 +12,7 @@ export default function NavBar() {
             <Link to='/home'>
             <img src={pokemonLogo} alt='imagen' width='150px' />
             </Link>
-            <Link to='/create'><p>Create new!</p></Link>
+            <Link to='/create'><p id='p'>Create new!</p></Link>
         </div>
         <div>
             <SearchBar />
