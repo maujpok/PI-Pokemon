@@ -10,7 +10,10 @@ export default function SearchInput () {
     const dispatch = useDispatch();
 
     function onClick() {
+        name ? 
         dispatch(searchName(name.toLowerCase()))
+        :
+        alert("falta el name");
         setName('')
     };
 
@@ -28,14 +31,14 @@ export default function SearchInput () {
         name='search'
         placeholder='search...'
         onChange={changeInput}
+        required
         />
-        {/* <input
+        <input
         className='search-input'
         type='submit'
         value='GO!'
         onClick={onClick}
-        /> */}
-        <button onClick={onClick}>GO!</button>
+        />
     </div>
     )
 };

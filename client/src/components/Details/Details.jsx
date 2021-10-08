@@ -5,14 +5,14 @@ import "./Details.css";
 
 export default function Details ({name}) {
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch(); 
 
     useEffect(() => {
         dispatch(getName(name))
     }, [dispatch, name]);
-
-    const loaded = useSelector((state) => state.pokemonLoaded)
     
+    const loaded = useSelector((state) => state.pokemonLoaded);
+
     return(
         <div id='general'>
             <h2>Pokemon Details Component</h2>
@@ -54,7 +54,7 @@ export default function Details ({name}) {
                         <h4>{loaded.weight}</h4>
                     </div>
                     <div id='item'>
-                        <span>Types</span>
+                        <span>Type</span>
                         <h4>{loaded.types}</h4>
                     </div>
                 </div>

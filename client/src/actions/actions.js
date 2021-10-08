@@ -9,7 +9,7 @@ export function fetchApi () {
                     id: e.id,
                     img: e.img,
                     name: e.name,
-                    types: e.types
+                    types: e.types.join(' ')
                 }
             })
             dispatch(loadPokemons(items))
@@ -26,16 +26,16 @@ function loadPokemons (items) {
 
 export function getName(name) {
     return function(dispatch) {
-        // console.log(name)
         fetch(`http://localhost:3001/pokemons?name=${name}`)
             .then(res => res.json())
             .then(data => {
+                data.types = data.types.join(' ')
                 dispatch(loadPokemon(data))
-            });
-    }
+            })
+        }
 };
 
-export function loadPokemon(data) {
+function loadPokemon(data) {
     return {
         type: "LOAD_POKEMON",
         payload: data
@@ -51,6 +51,7 @@ export function sendData(data) {
             headers: {'Content-Type' : 'application/json'}
         })
         .then(() => dispatch(saveData()))
+        // .catch(() => dispatch(nameExists("The name already exist, choose another")))
     }
 };
 
@@ -59,6 +60,7 @@ function saveData() {
         type: "SAVED",
     }
 };
+
 
 
 export function getTypes(){
@@ -78,6 +80,7 @@ function addTypes(types){
 
 export function searchName (name) {
     return function (dispatch) {
+        dispatch(searchingData())
         fetch(`http://localhost:3001/pokemons?name=${name}`)
             .then(res => res.json())
             .then(data => {
@@ -87,6 +90,12 @@ export function searchName (name) {
                 // console.log(error)
                 dispatch(foundFailure("Not found"))
             })
+    }
+};
+
+function searchingData() {
+    return {
+        type: "SEARCHING"
     }
 };
 

@@ -19,13 +19,14 @@ export default function SearchResult() {
     return (
         <div id='result'>
             <h4 id='h4'>Result:</h4>
-            {result.found.length &&
-                // <div>
+            {result.loading && <div>Searching...</div>}
+            {pokemon &&
+                <div>
                     <Link to={`/${pokemon.name}`}>
                     <img src={result.found[0].img} alt='img' width='20px'/>
                     <span onClick={onClick}>{pokemon.name}</span>
                     </Link>
-                // </div>
+                </div>
                 }
             {result.notfound !== '' && 
                 <span className='text-danger'>{result.notfound}</span>

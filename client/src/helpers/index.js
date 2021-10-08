@@ -16,3 +16,4 @@ export function createJson(data1, data2) {
     data1.types = data2
     return data1;
 };
+

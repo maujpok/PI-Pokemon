@@ -54,3 +54,7 @@ form {
 #unit{
     display: flex;
 }
+
+#danger{
+    color:red;
+}

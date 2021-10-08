@@ -2,7 +2,7 @@ const initialState = {
     pokemons: [],
     pokemonCreated: [],
     pokemonLoaded: [],
-    search: {found:[], notfound: ''},
+    search: {found:[], loading: false, notfound: ''},
     types: []
 };
 
@@ -36,10 +36,22 @@ const rootReducer = (state = initialState, action) => {
         }
     }
 
+    if(action.type === "SEARCHING") {
+        return {
+            ...state,
+            search: {
+                loading: true,
+                found: [],
+                notfound: ''
+            }
+        }
+    }
+
     if(action.type === "NOT_FOUND") {
         return {
             ...state,
             search: {
+                loading: false,
                 found: [],
                 notfound: action.payload
             }
@@ -50,6 +62,7 @@ const rootReducer = (state = initialState, action) => {
         return {
             ...state,
             search: {
+                loading: false,
                 found: [action.payload],
                 notfound: ""
             }
@@ -63,6 +76,13 @@ const rootReducer = (state = initialState, action) => {
                 found: [],
                 notfound: ""
             }
+        }
+    }
+
+    if(action.type === "NAME:EXIST") {
+        return {
+            ...state,
+            
         }
     }
 

@@ -13,21 +13,31 @@ const newPokemon = {
     speed: undefined,
     height: undefined,
     weight: undefined,
-    types: undefined
+    img: '',
+    types: ''
 };
 
 function Create ({pokemonsTypes, getTypes, sendData}) {
 
 const [Input, setInput] = useState(newPokemon);
 const [_types, setTypes] = useState([]);
+const [error, setError] = useState('');
+// const [notypes, setNotypes] = useState('');
 
 useEffect(() => {
     getTypes()
-    // console.log(pokemonsTypes)
 }, [getTypes]);
 
 orderByName(pokemonsTypes);
 
+function validateName(e) {
+    if(!/^[a-zA-Z]+$/.test(e)) {
+        setError('Only letters, one word')
+    } else {
+        setError('')
+    }
+    setInput({...Input, name: e})
+};
 
 function inputChange (e) {
     setInput({...Input, [e.target.name]: e.target.value});
@@ -46,13 +56,16 @@ let redir = () => {
     window.location.href = `/${Input.name.toLowerCase()}`;
 }
 
-function handleSubmit (e) {
+function onSubmit (e) {
     e.preventDefault()
-    sendData(createJson(Input, _types))
-    setInput(newPokemon);
-    // handleChange(e)
-    alert("Your Pokemons now lives! Come to see it");
-    redir();
+    if(_types.length === 0) {
+        alert('You must choose a type')
+    } else {
+        sendData(createJson(Input, _types))
+        setInput(newPokemon);
+        alert("Pokemon created! Click on accept to see details");
+        redir();
+    }
 };
 
 return (
@@ -60,7 +73,7 @@ return (
     <div>
         <h1>Create your own Pokemon!</h1>
     </div><div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={onSubmit}>
                     <label>Name</label>
                     <input
                         id='form'
@@ -68,9 +81,9 @@ return (
                         type='text'
                         placeholder='enter name...'
                         value={Input.name}
-                        onChange={inputChange}
+                        onChange={e => validateName(e.target.value)}
                         required />
-
+                    {!error ? null : <span id='danger'>{error}</span>}
                     <label>HP</label>
                     <input
                         id='form'
@@ -125,6 +138,15 @@ return (
                         value={Input.weight}
                         onChange={inputChange} />
 
+                    <label>Image</label>
+                    <input
+                        id='form'
+                        name='img'
+                        type='link'
+                        placeholder='enter image link...'
+                        value={Input.img}
+                        onChange={inputChange} />
+
                     <div id='container'>
                         <b>Select type/s</b>
                         <div id='types'>
@@ -140,6 +162,7 @@ return (
                                 </div>
                             ))
                         }
+                        {/* {!notypes ? null : <span id='danger'>{notypes}</span>} */}
                         </div>
                     </div>  
                     
