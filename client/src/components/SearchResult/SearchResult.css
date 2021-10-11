@@ -1,8 +1,10 @@
 #result{
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    margin-bottom: 3px;
+    flex-direction: row;
+    justify-content: center;
+    /* margin-bottom: 11px; */
+    align-items: center;
+    padding: 5px;
 }
 
 #h4{

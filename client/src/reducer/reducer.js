@@ -1,6 +1,6 @@
 const initialState = {
     pokemons: [],
-    pokemonCreated: [],
+    pokemonsCopy: [],
     pokemonLoaded: [],
     search: {found:[], loading: false, notfound: ''},
     types: []
@@ -8,36 +8,28 @@ const initialState = {
 
 const rootReducer = (state = initialState, action) => {
     
-    if(action.type === "ADD_ITEMS") {
-        return {
+    switch (action.type) {
+        case "ADD_ITEMS": return {
             ...state,
-            pokemons: action.payload
+            pokemons: action.payload,
         }
-    }
-
-    if(action.type === "SAVED") {
-        return {
+        case "COPY": return {
             ...state,
-            pokemonCreated: action.payload
+            pokemonsCopy: action.payload
         }
-    }
-
-    if(action.type === "LOAD_POKEMON") {
-        return {
+        case "SAVED": return {
+            ...state,
+            pokemonCreated: action.payload,
+        }
+        case "LOAD_POKEMON": return {
             ...state,
             pokemonLoaded: action.payload
         }
-    }
-
-    if(action.type === "ADD_TYPES") {
-        return {
+        case "ADD_TYPES": return {
             ...state,
             types: action.payload
         }
-    }
-
-    if(action.type === "SEARCHING") {
-        return {
+        case "SEARCHING": return {
             ...state,
             search: {
                 loading: true,
@@ -45,10 +37,7 @@ const rootReducer = (state = initialState, action) => {
                 notfound: ''
             }
         }
-    }
-
-    if(action.type === "NOT_FOUND") {
-        return {
+        case "NOT_FOUND": return {
             ...state,
             search: {
                 loading: false,
@@ -56,10 +45,7 @@ const rootReducer = (state = initialState, action) => {
                 notfound: action.payload
             }
         }
-    }
-
-    if(action.type === "FOUND") {
-        return {
+        case "FOUND": return {
             ...state,
             search: {
                 loading: false,
@@ -67,26 +53,68 @@ const rootReducer = (state = initialState, action) => {
                 notfound: ""
             }
         }
-    }
-
-    if(action.type === "CLEAN") {
-        return {
+        case "CLEAN": return {
             ...state,
             search: {
                 found: [],
                 notfound: ""
             }
         }
-    }
-
-    if(action.type === "NAME:EXIST") {
-        return {
+        case "FILTER_CREATED": return {
             ...state,
-            
+            pokemonsCopy: state.pokemons.filter(e => e.id.length > 4)
         }
-    }
+        case "FILTER_API": return {
+            ...state,
+            pokemonsCopy: state.pokemons.filter(e => e.id < 2000)
+        }
+        case "FILTER_TYPE": return {
+            ...state,
+            pokemonsCopy: state.pokemons.filter(e => e.types.includes(action.payload))
+        }
+        case "CLEAN_FILTERS": return {
+            ...state,
+            pokemonsCopy: state.pokemons
+        }
+        case "NAME_ASC": return {
+            ...state,
+            pokemonsCopy: state.pokemonsCopy.sort(function (a,b) {
+                if(a.name > b.name) return 1;
+                if (a.name < b.name) return -1;
+                return 0;
+            })
+        }
+        case "NAME_DESC": return {
+            ...state,
+            pokemonsCopy: state.pokemonsCopy.sort(function (a,b) {
+                if(a.name > b.name) return -1;
+                if (a.name < b.name) return 1;
+                return 0;
+            })
+        }
+        case "ORDER_ATTACK_ASC": return {
+            ...state,
+            pokemonsCopy: state.pokemonsCopy.sort(function(a,b) {
+                if(a.attack > b.attack) return 1;
+                if (a.attack < b.attack) return -1;
+                return 0;
+            })
+        }
+        case "ORDER_ATTACK_DESC": return {
+            ...state,
+            pokemonsCopy: state.pokemonsCopy.sort(function(a,b) {
+                if(a.attack > b.attack) return -1;
+                if (a.attack < b.attack) return 1;
+                return 0;
+            })
+        }
+        case "DEFAULT": return {
+            ...state,
+            pokemonsCopy: state.pokemons
+        }
 
-    else return state
+        default: return state;
+    }
 };
 
-export default rootReducer;
+export default rootReducer; 

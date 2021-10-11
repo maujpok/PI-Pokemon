@@ -9,10 +9,12 @@ export function fetchApi () {
                     id: e.id,
                     img: e.img,
                     name: e.name,
+                    attack: e.attack,
                     types: e.types.join(' ')
                 }
             })
             dispatch(loadPokemons(items))
+            dispatch({type: "COPY", payload: items})
         })
     }
 };
@@ -51,7 +53,6 @@ export function sendData(data) {
             headers: {'Content-Type' : 'application/json'}
         })
         .then(() => dispatch(saveData()))
-        // .catch(() => dispatch(nameExists("The name already exist, choose another")))
     }
 };
 
@@ -87,7 +88,6 @@ export function searchName (name) {
                 dispatch(foundSuccess(data))
             })
             .catch(error => {
-                // console.log(error)
                 dispatch(foundFailure("Not found"))
             })
     }
@@ -115,4 +115,59 @@ function foundFailure (err) {
 
 export function cleanSearchResult(dispatch) {
         dispatch({type: "CLEAN"})
+};
+
+export function filterCreated() {
+    return {
+        type: "FILTER_CREATED"
+    }
+};
+
+export function filterAPI() {
+    return {
+        type: "FILTER_API"
+    }
+};
+
+export function filterType(data) {
+    return {
+        type: "FILTER_TYPE",
+        payload: data
+    }
+};
+
+export function cleanFilters() {
+    return {
+        type: "CLEAN_FILTERS"
+    }
+};
+
+export function orderNameAsc() {
+    return {
+        type: "NAME_ASC"
+    }
+}; 
+
+export function orderNameDesc() {
+    return {
+        type: "NAME_DESC"
+    }
+};
+
+export function orderAttackAsc() {
+    return {
+        type: "ORDER_ATTACK_ASC"
+    }
+};
+
+export function orderAttackDesc() {
+    return {
+        type: "ORDER_ATTACK_DESC"
+    }
+};
+
+export function orderDefault() {
+    return {
+        type: "DEFAULT"
+    }
 };

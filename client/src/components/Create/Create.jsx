@@ -1,34 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import './Create.css';
 import {connect} from "react-redux";
 import { getTypes, sendData } from "../../actions/actions";
-import { createJson, orderByName } from "../../helpers";
+import { createJson, newPokemon, orderByName } from "../../helpers";
 
+function Create ({pokemonsTypes, sendData}) {
 
-const newPokemon = {
-    name: "",
-    hp: undefined,
-    attack: undefined,
-    defense: undefined,
-    speed: undefined,
-    height: undefined,
-    weight: undefined,
-    img: '',
-    types: ''
-};
-
-function Create ({pokemonsTypes, getTypes, sendData}) {
+orderByName(pokemonsTypes);
 
 const [Input, setInput] = useState(newPokemon);
 const [_types, setTypes] = useState([]);
 const [error, setError] = useState('');
-// const [notypes, setNotypes] = useState('');
 
-useEffect(() => {
-    getTypes()
-}, [getTypes]);
-
-orderByName(pokemonsTypes);
 
 function validateName(e) {
     if(!/^[a-zA-Z]+$/.test(e)) {

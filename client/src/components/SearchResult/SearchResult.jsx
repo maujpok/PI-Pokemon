@@ -18,8 +18,8 @@ export default function SearchResult() {
 
     return (
         <div id='result'>
-            <h4 id='h4'>Result:</h4>
-            {result.loading && <div>Searching...</div>}
+            <h4>Result:</h4>
+            {result.loading && <div> Searching...</div>}
             {pokemon &&
                 <div>
                     <Link to={`/${pokemon.name}`}>
@@ -29,7 +29,7 @@ export default function SearchResult() {
                 </div>
                 }
             {result.notfound !== '' && 
-                <span className='text-danger'>{result.notfound}</span>
+                <span className='text-danger'> {result.notfound}</span>
                 }
         </div>
     )

@@ -1,12 +1,32 @@
 .showall {
     display: flex;
+    flex-flow:wrap;
+    /* flex-wrap: wrap; */
+    /* grid-template-columns: auto auto auto auto; */
     /* flex-direction: row; */
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    top: 0;
+    /* flex-wrap:wrap; */
+    justify-content: center;
+    /* top: 0;
     left: 0;
     bottom: 0;
-    right: 0;
+    right: 0; */
     align-items: center;
-    position: relative;
+    /* position: relative; */
+    height: 650px;
+}
+
+#paginator_btn{
+    background-color: black;
+    color: steelblue;
+    border-radius: 5px;
+    padding: 3px;
+    margin-bottom: 3px;
+    width: 10%;
+    margin: 3px;
+    /* position: relative; */
+}
+
+#paginator{
+    position:relative;
+    margin-bottom: 0;
 }

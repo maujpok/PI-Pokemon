@@ -8,16 +8,14 @@ import SearchResult from "../SearchResult/SearchResult";
 export default function SearchBar() {
     return (
         <div className='searchbar'>
-            {/* <div id='search'> */}
+            <div id='search'>
                 <SearchInput />
                 <SearchResult />
-            {/* </div> */}
-            {/* <div id='order_filter'> */}
-            <div>
+            </div>
+            <div id='order_filter'>
                 <OrderItems />
                 <FilterItems />
             </div>
-            {/* </div> */}
         </div>
     )
 };

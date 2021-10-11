@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { getName } from "../../actions/actions";
 import { useDispatch, useSelector } from "react-redux";
+import {Link} from "react-router-dom";
 import "./Details.css";
 
 export default function Details ({name}) {
@@ -15,7 +16,12 @@ export default function Details ({name}) {
 
     return(
         <div id='general'>
-            <h2>Pokemon Details Component</h2>
+            <div>
+                <h2>Pokemon Details Component</h2>
+            </div>
+            <div id='detail_btn'>
+                <Link to='/home'><button> BACK HOME </button></Link>
+            </div>
             <div className='container'>
                 <div id='img_container'>
                 <img id='img' src={loaded.img} alt='poke_img'/>
