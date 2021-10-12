@@ -1,61 +1,62 @@
-import React, { useState} from "react";
-import './Create.css';
-import {connect} from "react-redux";
+import React, { useEffect, useState} from "react";
+import { useDispatch, useSelector} from "react-redux";
 import { getTypes, sendData } from "../../actions/actions";
-import { createJson, newPokemon, orderByName } from "../../helpers";
+import { createJson, fromAtoZ, newPokemon, redirect } from "../../helpers";
+import './Create.css';
 
-function Create ({pokemonsTypes, sendData}) {
+export default function Create () {
+    const dispatch = useDispatch();
+    useEffect(()=> {
+        dispatch(getTypes())
+    }, [dispatch]);
+    
+    const types = useSelector((state) => state.types.sort(fromAtoZ))
 
-orderByName(pokemonsTypes);
+    const [Input, setInput] = useState(newPokemon);
+    const [_types, setTypes] = useState([]);
+    const [error, setError] = useState('');
+    const [errortype, setErrortype] = useState('');
 
-const [Input, setInput] = useState(newPokemon);
-const [_types, setTypes] = useState([]);
-const [error, setError] = useState('');
+
+    function validateName(e) {
+        if(!/^[A-Za-z0-9_-]*$/.test(e)) {
+            setError('Without spaces please')
+        } else {
+            setError('')
+        }
+        setInput({...Input, name: e})
+    };
+
+    function inputChange (e) {
+        setInput({...Input, [e.target.name]: e.target.value});
+    };
+
+    function selectType(e) {
+        setErrortype('');
+        let valueNum = parseInt(e.target.value);
+
+        _types.includes(valueNum) ?
+        setTypes(_types.filter(e => e !== valueNum))
+        :
+        setTypes([..._types, valueNum])
+    };
 
 
-function validateName(e) {
-    if(!/^[a-zA-Z]+$/.test(e)) {
-        setError('Only letters, one word')
-    } else {
-        setError('')
-    }
-    setInput({...Input, name: e})
-};
+    function onSubmit (e) {
+        e.preventDefault()
+        if(_types.length === 0) return setErrortype('debes elegir un tipo');
+        const Pokemon = createJson(Input, _types);
+        dispatch(sendData(Pokemon));
+        console.log('front', Pokemon);
+        alert('creado')
+        redirect(Input.name)
+    };
 
-function inputChange (e) {
-    setInput({...Input, [e.target.name]: e.target.value});
-};
-
-function handleChange(e) {
-    let value = e.target.value;
-    let valueNum = parseInt(value);
-    _types.includes(valueNum) ?
-    setTypes(_types.filter(e => e !== valueNum))
-    :
-    setTypes([..._types, parseInt(e.target.value)])
-};
-
-let redir = () => {
-    window.location.href = `/${Input.name.toLowerCase()}`;
-}
-
-function onSubmit (e) {
-    e.preventDefault()
-    if(_types.length === 0) {
-        alert('You must choose a type')
-    } else {
-        sendData(createJson(Input, _types))
-        setInput(newPokemon);
-        alert("Pokemon created! Click on accept to see details");
-        redir();
-    }
-};
-
-return (
-    <>
-    <div>
-        <h1>Create your own Pokemon!</h1>
-    </div><div>
+    return (
+        <>
+        <div>
+            <h1>Create your own Pokemon!</h1>
+        </div>
             <form onSubmit={onSubmit}>
                     <label>Name</label>
                     <input
@@ -67,6 +68,7 @@ return (
                         onChange={e => validateName(e.target.value)}
                         required />
                     {!error ? null : <span id='danger'>{error}</span>}
+
                     <label>HP</label>
                     <input
                         id='form'
@@ -74,7 +76,7 @@ return (
                         type='text'
                         placeholder='enter hp...'
                         value={Input.hp}
-                        onChange={inputChange} />
+                        onChange={e => inputChange(e)} />
 
                     <label>Attack</label>
                     <input
@@ -83,7 +85,7 @@ return (
                         type='text'
                         placeholder='enter attack points...'
                         value={Input.attack}
-                        onChange={inputChange} />
+                        onChange={e => inputChange(e)} />
 
                     <label>Defense</label>
                     <input
@@ -92,7 +94,7 @@ return (
                         type='text'
                         placeholder='enter defense points...'
                         value={Input.defense}
-                        onChange={inputChange} />
+                        onChange={e => inputChange(e)} />
 
                     <label>Speed</label>
                     <input
@@ -101,7 +103,7 @@ return (
                         type='text'
                         placeholder='enter speed...'
                         value={Input.speed}
-                        onChange={inputChange} />
+                        onChange={e => inputChange(e)} />
 
                     <label>Height</label>
                     <input
@@ -110,7 +112,7 @@ return (
                         type='text'
                         placeholder='enter height...'
                         value={Input.height}
-                        onChange={inputChange} />
+                        onChange={e => inputChange(e)} />
 
                     <label>Weight</label>
                     <input
@@ -119,7 +121,7 @@ return (
                         type='text'
                         placeholder='enter weight...'
                         value={Input.weight}
-                        onChange={inputChange} />
+                        onChange={e => inputChange(e)} />
 
                     <label>Image</label>
                     <input
@@ -128,41 +130,31 @@ return (
                         type='link'
                         placeholder='enter image link...'
                         value={Input.img}
-                        onChange={inputChange} />
+                        onChange={e => inputChange(e)} />
 
                     <div id='container'>
                         <b>Select type/s</b>
                         <div id='types'>
                         {
-                            pokemonsTypes.map(e => (
+                            types.map(e => (
                                 <div key={e.id} id='unit'>
                                     <input
                                     type="checkbox"
                                     value={e.id}
-                                    onClick={handleChange}
+                                    onClick={e => selectType(e)}
                                     />
                                     <span id='names'>{e.name}</span>
                                 </div>
                             ))
                         }
-                        {/* {!notypes ? null : <span id='danger'>{notypes}</span>} */}
                         </div>
-                    </div>  
-                    
+                    </div>
+                    {errortype ? <span id='danger'>{errortype}</span>:null}
                     <button 
                     className='btn'
                     type='submit'
                     >Create!</button>
             </form>
-        </div></>
-    )
+        </>
+        )
 };
-
-
-const mapStateToProps = (state) => {
-    return {
-        pokemonsTypes: state.types
-    }
-};
-
-export default connect (mapStateToProps, {getTypes, sendData})(Create);

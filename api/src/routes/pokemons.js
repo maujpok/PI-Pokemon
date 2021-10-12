@@ -9,7 +9,7 @@ const {url_image, url_Base, url_40Items} = require('./auxs');
 router.get('/', async (req, res) => {
     // obtener listado pokemons desde api
     // solo datos necesarios para ruta principal (img, name, type)
-    const {name} = req.query;
+    const {name} = req.query
     const condition = name ? {where: {name}, include: Type} : {}
     
     if(name) {
@@ -79,7 +79,6 @@ router.get('/', async (req, res) => {
             res.status(500).send('Server error')
         }
     } else {
-        
         
         try {
             const dataApi = await fetch(url_40Items)
@@ -176,31 +175,25 @@ router.get('/:idPokemon', async (req, res) => {
 });
 
 router.post('', async (req, res) => {
-// recibe datos del form de la ruta de creacion de pokemons
-// crea un pokemon en la bbdd
-    const {name, hp, attack, defense, speed, height, weight, img, types} = req.body;
-    try{        
-        const [pokemon, created] = await Pokemon.findOrCreate({
-            where: {name: name},
-            defaults: {
-                name,
-                hp,
-                attack,
-                defense,
-                speed,
-                height,
-                weight,
-                img: img ? img : url_image
-            }
-        });
 
-        await pokemon.addTypes(types);
-        !created ? res.sendStatus(200) : res.sendStatus(400);
-
-    }catch(e){
-        res.sendStatus(404)
-    }
-});
-
+        const {name, hp, attack, defense, speed, height, weight, img, types} = req.body;
+        try{        
+            const newPokemon = await Pokemon.create({
+                    name,
+                    hp,
+                    attack,
+                    defense,
+                    speed,
+                    height,
+                    weight,
+                    img: img ? img : url_image
+            });
+    
+            await newPokemon.addTypes(types);
+            res.json(newPokemon)
+        }catch(e){
+            res.send(e)
+        }
+    });
 
 module.exports = router;

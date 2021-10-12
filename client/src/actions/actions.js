@@ -1,7 +1,7 @@
 
 export function fetchApi () {
-    return function(dispatch) {
-        fetch('http://localhost:3001/pokemons')
+    return async function(dispatch) {
+        await fetch('http://localhost:3001/pokemons')
         .then(res => res.json())
         .then(data => {
             let items = data.map(e => {
@@ -13,18 +13,11 @@ export function fetchApi () {
                     types: e.types.join(' ')
                 }
             })
-            dispatch(loadPokemons(items))
-            dispatch({type: "COPY", payload: items})
+            dispatch({type: "ADD_ITEMS", payload: items})
         })
     }
 };
 
-function loadPokemons (items) {
-    return {
-        type: "ADD_ITEMS",
-        payload: items
-    }
-};
 
 export function getName(name) {
     return function(dispatch) {
@@ -32,50 +25,40 @@ export function getName(name) {
             .then(res => res.json())
             .then(data => {
                 data.types = data.types.join(' ')
-                dispatch(loadPokemon(data))
+                dispatch({type: "LOAD_POKEMON", payload: data})
             })
         }
 };
 
-function loadPokemon(data) {
-    return {
-        type: "LOAD_POKEMON",
-        payload: data
-    }
-};
-
 export function sendData(data) {
-    return function (dispatch) {
-        console.log(JSON.stringify(data), 'fn fetch');
-        fetch('http://localhost:3001/pokemons',{
+    console.log('senddataIN', data)
+    data = JSON.stringify(data);
+    return async function (dispatch) {
+        console.log('fetchIN', data)
+        await fetch('http://localhost:3001/pokemons',{
             method: "POST",
-            body: JSON.stringify(data),
+            body: data,
             headers: {'Content-Type' : 'application/json'}
         })
-        .then(() => dispatch(saveData()))
+        .then(res => res.json())
+        .then(data => console.log('bbddOK', data))
+        .then(() => dispatch({type: "SAVED"}))
     }
 };
-
-function saveData() {
-    return {
-        type: "SAVED",
-    }
-};
-
-
 
 export function getTypes(){
-    return function(dispatch){
-        fetch('http://localhost:3001/types')
+    return async function(dispatch){
+        await fetch('http://localhost:3001/types')
         .then(res => res.json())
-        .then(data => dispatch(addTypes(data)))
-    }
-};
-
-function addTypes(types){
-    return {
-        type: "ADD_TYPES",
-        payload: types
+        .then(data => {
+            let types = data.map(({id, name}) => {
+                return {
+                    id,
+                    name: name[0].toUpperCase() + name.slice(1)
+                }
+            })
+            dispatch({type: "ADD_TYPES", payload: types})
+        })
     }
 };
 
@@ -117,57 +100,37 @@ export function cleanSearchResult(dispatch) {
         dispatch({type: "CLEAN"})
 };
 
-export function filterCreated() {
-    return {
-        type: "FILTER_CREATED"
+export function orderItems(value) {
+    return function(dispatch) {
+        switch (value) {
+            case "A-Z": {
+                dispatch({type: value})
+                return dispatch({type: "A-Z_COMPLETE"})
+            }
+            case "Z-A": {
+                dispatch({type: value})
+                return dispatch({type: "Z-A_COMPLETE"})
+            }
+            case "10-1": {
+                dispatch({type: value})
+                return dispatch({type: "10-1_COMPLETE"})
+                }
+            case "1-10": {
+                dispatch({type: value})
+                return dispatch({type: "1-10_COMPLETE"})
+            }
+            default: dispatch({type: "RESET_ORDER"})
+        }
     }
 };
 
-export function filterAPI() {
-    return {
-        type: "FILTER_API"
-    }
-};
-
-export function filterType(data) {
-    return {
-        type: "FILTER_TYPE",
-        payload: data
-    }
-};
-
-export function cleanFilters() {
-    return {
-        type: "CLEAN_FILTERS"
-    }
-};
-
-export function orderNameAsc() {
-    return {
-        type: "NAME_ASC"
-    }
-}; 
-
-export function orderNameDesc() {
-    return {
-        type: "NAME_DESC"
-    }
-};
-
-export function orderAttackAsc() {
-    return {
-        type: "ORDER_ATTACK_ASC"
-    }
-};
-
-export function orderAttackDesc() {
-    return {
-        type: "ORDER_ATTACK_DESC"
-    }
-};
-
-export function orderDefault() {
-    return {
-        type: "DEFAULT"
+export function filterItems(value) {
+    return function(dispatch) {
+        switch (value) {
+            case "created": return dispatch({type: "FILTER_CREATED"})
+            case "existing": return dispatch({type: "FILTER_API"})
+            case "clean": return dispatch({type: "CLEAN_FILTERS"})
+            default: return dispatch({type: "FILTER_TYPE", payload: value.toLowerCase()})
+        }
     }
 };

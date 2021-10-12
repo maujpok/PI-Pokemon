@@ -1,25 +1,27 @@
+import { attackAsc, attackDesc, fromAtoZ, fromZtoA } from "../helpers";
+
+
 const initialState = {
     pokemons: [],
-    pokemonsCopy: [],
-    pokemonLoaded: [],
     search: {found:[], loading: false, notfound: ''},
+    pokemonCreated: '',
+    pokemonLoaded: [],
+    pokemonsCopy: [],
+    filtered: [],
     types: []
 };
 
-const rootReducer = (state = initialState, action) => {
+const rootReducer = (state = initialState, action = {}) => {
     
     switch (action.type) {
         case "ADD_ITEMS": return {
             ...state,
             pokemons: action.payload,
-        }
-        case "COPY": return {
-            ...state,
             pokemonsCopy: action.payload
         }
         case "SAVED": return {
             ...state,
-            pokemonCreated: action.payload,
+            pokemonCreated: action.payload
         }
         case "LOAD_POKEMON": return {
             ...state,
@@ -76,41 +78,41 @@ const rootReducer = (state = initialState, action) => {
             ...state,
             pokemonsCopy: state.pokemons
         }
-        case "NAME_ASC": return {
+        case "A-Z": return {
             ...state,
-            pokemonsCopy: state.pokemonsCopy.sort(function (a,b) {
-                if(a.name > b.name) return 1;
-                if (a.name < b.name) return -1;
-                return 0;
-            })
+            filtered: state.pokemonsCopy.sort(fromAtoZ),
         }
-        case "NAME_DESC": return {
+        case "A-Z_COMPLETE": return {
             ...state,
-            pokemonsCopy: state.pokemonsCopy.sort(function (a,b) {
-                if(a.name > b.name) return -1;
-                if (a.name < b.name) return 1;
-                return 0;
-            })
+            pokemonsCopy: [...state.filtered]
         }
-        case "ORDER_ATTACK_ASC": return {
+        case "Z-A": return {
             ...state,
-            pokemonsCopy: state.pokemonsCopy.sort(function(a,b) {
-                if(a.attack > b.attack) return 1;
-                if (a.attack < b.attack) return -1;
-                return 0;
-            })
+            filtered: state.pokemonsCopy.sort(fromZtoA)
         }
-        case "ORDER_ATTACK_DESC": return {
+        case "Z-A_COMPLETE": return {
             ...state,
-            pokemonsCopy: state.pokemonsCopy.sort(function(a,b) {
-                if(a.attack > b.attack) return -1;
-                if (a.attack < b.attack) return 1;
-                return 0;
-            })
+            pokemonsCopy: [...state.filtered]
         }
-        case "DEFAULT": return {
+        case "1-10": return {
             ...state,
-            pokemonsCopy: state.pokemons
+            filtered: state.pokemonsCopy.sort(attackAsc)
+        }
+        case "1-10_COMPLETE": return {
+            ...state,
+            pokemonsCopy: [...state.filtered]
+        }
+        case "10-1": return {
+            ...state,
+            filtered: state.pokemonsCopy.sort(attackDesc),
+        }
+        case "10-1_COMPLETE": return {
+            ...state,
+            pokemonsCopy: [...state.filtered]
+        }
+        case "RESET_ORDER": return {
+            ...state,
+            pokemonsCopy: [...state.pokemons]
         }
 
         default: return state;

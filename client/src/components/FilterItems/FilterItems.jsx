@@ -1,43 +1,21 @@
 import React from "react";
 import { connect, useDispatch } from "react-redux";
-import { cleanFilters, filterAPI, filterCreated, filterType } from "../../actions/actions";
+import { fetchApi, filterItems } from "../../actions/actions";
+import { fromAtoZ } from "../../helpers";
 
-
-
-function FilterItems({types}){
+function FilterItems({types}) {
 
     const dispatch = useDispatch();
-    
-    const onFilter = ({target}) => {
-
-        switch(target.value) {
-            case 'created': {
-                dispatch(filterCreated());
-                break;
-            }
-            case 'existing': {
-                dispatch(filterAPI())
-                break;
-            }
-            case 'clean': {
-                dispatch(cleanFilters())
-                break;
-            }
-            default: {
-                dispatch(filterType(target.value))
-            }
-        }
-    };
 
     return (
         <>  
             <label htmlFor="Filter">  Filter </label>
             <select 
             id="filter" 
-            onClick={e => onFilter(e)}>
+            onChange={e => dispatch(filterItems(e.target.value))}>
                 <optgroup label='By Creator' selected>
-                    <option value="existing">Existing Pokemons</option>
                     <option value="created">Created Pokemons</option>
+                    <option value="existing">Existing Pokemons</option>
                 </optgroup>
                 <optgroup label='By Type'>
                         {
@@ -50,14 +28,14 @@ function FilterItems({types}){
                         }
                 </optgroup>
             </select>
-            <button value='clean' onClick={e => onFilter(e)}>Clean</button>
+            <button value='clean' onClick={e => dispatch(fetchApi())}>Clean</button>
         </>
     )
 };
 
 const mapStateToProps = (state) => {
     return {
-        types: state.types
+        types: state.types.sort(fromAtoZ)
     }
 };
 

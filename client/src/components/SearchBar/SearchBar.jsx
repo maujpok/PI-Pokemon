@@ -13,8 +13,8 @@ export default function SearchBar() {
                 <SearchResult />
             </div>
             <div id='order_filter'>
-                <OrderItems />
                 <FilterItems />
+                <OrderItems />
             </div>
         </div>
     )
