@@ -133,7 +133,7 @@ router.get('/:idPokemon', async (req, res) => {
         if(idPokemon.length > 4) {
             await Pokemon.findByPk(idPokemon, {include: Type})
             .then(data => {
-                res.send([{
+                res.send({
                     id: data.id,
                     name: data.name,
                     hp: data.hp,
@@ -146,14 +146,14 @@ router.get('/:idPokemon', async (req, res) => {
                     types: data.types.map(e => {
                         return e.name
                     })
-                }]);
+                });
             })
 
         } else {
             await fetch(`https://pokeapi.co/api/v2/pokemon/${idPokemon}`)
             .then(response => response.json())
             .then(data => {
-                res.send([{
+                res.send({
                     id: data.id,
                     name: data.name,
                     hp: data.stats[0].base_stat,
@@ -166,7 +166,7 @@ router.get('/:idPokemon', async (req, res) => {
                     types: data.types.map(e => {
                         return e.type.name
                     })
-                }]);
+                });
             })
         }
     }catch(e){
@@ -177,6 +177,7 @@ router.get('/:idPokemon', async (req, res) => {
 router.post('', async (req, res) => {
 
         const {name, hp, attack, defense, speed, height, weight, img, types} = req.body;
+        
         try{        
             const newPokemon = await Pokemon.create({
                     name,
@@ -190,7 +191,9 @@ router.post('', async (req, res) => {
             });
     
             await newPokemon.addTypes(types);
-            res.json(newPokemon)
+
+            res.send(newPokemon);
+
         }catch(e){
             res.send(e)
         }

@@ -20,28 +20,22 @@ module.exports = (sequelize) => {
       }
     },
     hp: {
-      type: DataTypes.STRING,
-      defaultValue: 1
+      type: DataTypes.INTEGER
     },
     attack: {
-      type: DataTypes.STRING,
-      defaultValue: 1
+      type: DataTypes.INTEGER
     },
     defense: {
-      type: DataTypes.STRING,
-      defaultValue: 1
+      type: DataTypes.INTEGER
     },
     speed: {
-      type: DataTypes.STRING,
-      defaultValue: 1
+      type: DataTypes.INTEGER
     },
     height: {
-      type: DataTypes.STRING,
-      defaultValue: 1
+      type: DataTypes.INTEGER
     },
     weight: {
-      type: DataTypes.STRING,
-      defaultValue: 1
+      type: DataTypes.INTEGER
     },
     img: {
       type: DataTypes.STRING
@@ -50,7 +44,3 @@ module.exports = (sequelize) => {
     timestamps: false
   })
 };
-
-
-
-

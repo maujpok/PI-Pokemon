@@ -1,6 +1,7 @@
 
 export function fetchApi () {
     return async function(dispatch) {
+        dispatch({type: "LOADING"});
         await fetch('http://localhost:3001/pokemons')
         .then(res => res.json())
         .then(data => {
@@ -19,9 +20,10 @@ export function fetchApi () {
 };
 
 
-export function getName(name) {
+export function getName(id) {
     return function(dispatch) {
-        fetch(`http://localhost:3001/pokemons?name=${name}`)
+        dispatch({type: "LOADING"});
+        fetch(`http://localhost:3001/pokemons/${id}`)
             .then(res => res.json())
             .then(data => {
                 data.types = data.types.join(' ')
@@ -31,18 +33,16 @@ export function getName(name) {
 };
 
 export function sendData(data) {
-    console.log('senddataIN', data)
-    data = JSON.stringify(data);
     return async function (dispatch) {
-        console.log('fetchIN', data)
         await fetch('http://localhost:3001/pokemons',{
             method: "POST",
-            body: data,
+            body: JSON.stringify(data),
             headers: {'Content-Type' : 'application/json'}
         })
         .then(res => res.json())
-        .then(data => console.log('bbddOK', data))
-        .then(() => dispatch({type: "SAVED"}))
+        .then(data => data.id)
+        .then(data => dispatch({type: "SAVED", payload: data}))
+        .then(() => dispatch(fetchApi()))
     }
 };
 
@@ -64,7 +64,7 @@ export function getTypes(){
 
 export function searchName (name) {
     return function (dispatch) {
-        dispatch(searchingData())
+        dispatch(searching());
         fetch(`http://localhost:3001/pokemons?name=${name}`)
             .then(res => res.json())
             .then(data => {
@@ -76,7 +76,7 @@ export function searchName (name) {
     }
 };
 
-function searchingData() {
+function searching() {
     return {
         type: "SEARCHING"
     }

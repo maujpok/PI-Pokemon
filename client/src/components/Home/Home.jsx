@@ -1,78 +1,59 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchApi, getTypes } from "../../actions/actions";
+import { fetchApi } from "../../actions/actions";
+import { imageLoading } from "../../helpers";
 import Pokemon from "../Pokemon/Pokemon";
+import Paginator from "../Paginator/Paginator";
 import SearchBar from "../SearchBar/SearchBar";
-import './Home.css';
+import "../Styles/Home.css";
 
 
-export default function Home() {
+export default function Home() { 
 
     const dispatch = useDispatch();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(12);
+    const loading = useSelector((state) => state.loading);   
     const pokemons = useSelector((state) => state.pokemonsCopy);
+    const control = useSelector((state) => state.pokemons);
     
-    useEffect(() => {
-        dispatch(fetchApi())
-        dispatch(getTypes())
-    }, [dispatch]);
+    useEffect(()=> {
+        if(!pokemons.length && !control.length) dispatch(fetchApi())
+    },[dispatch, pokemons, control]);
     
-    const [current, setCurrent] = useState(0);
-    const [page, setPage] = useState(1);
-
-    const paginator = () => {
-        if(current === 0)
-        return pokemons.slice(current, current +9)
-        else
-        return pokemons.slice(current, current+12)
-    };
-
-    const data = paginator();
-    
-    const nextPage = () => {
-        if(pokemons.slice(current) > data)
-        setCurrent(current+12)
-        if(pokemons.slice(current) > data)
-        setPage(page+1)
-    };
-    
-    const prevPage = () => {
-        setPage(page > 1 ? page -1 : 1);
-        if(current > 9) setCurrent(current - 12)
-        else setCurrent(0)
-    }
+    const indexLast = currentPage * itemsPerPage;
+    const indexFirst =  indexLast - itemsPerPage;
+    const current = pokemons.slice(indexFirst, indexLast);
+    const changePage = (pages) => setCurrentPage(pages);
 
     return (
         <>
-        <div id='home'>
-            <div id='s.bar'>
-                <SearchBar/>
-            </div>
-            <div>
-                <h3>"Find and create any Pokemon!"</h3>
-                <div className='showall'>
-                {data.map(({id, name, types, img}) => 
-                    <Pokemon
-                        key={id}
-                        id={id}
-                        name={name}
-                        types={types}
-                        img={img}/>
-                        )}
-                </div>
-                {/* <span>{pokemons.length}</span> */}
-                <div id='paginator'>
-                    <button
-                    id='paginator_btn'
-                    onClick={prevPage}
-                    >Prev</button>
-                    <span> {page} </span>
-                    <button
-                    id='paginator_btn'
-                    onClick={nextPage}
-                    >Next</button>
-                </div>
-                <hr></hr>
-                <span>Mauricio Portillo FT 17-A</span>
+        <div className='home'>
+            <SearchBar setCurrentPage={setCurrentPage}/>
+            <div id='home_container'>
+                <h3>Find and create any Pokemon!</h3>
+                {loading ? <><img src={imageLoading} alt="loading" width='400'/></>
+                    : pokemons.length === 0 ?
+                    <h3>No pokemons on this filter</h3>
+                    :
+                    <>
+                    <div className='showall'>
+                    {current.map(({id, name, types, img}) => 
+                        <Pokemon
+                            key={id}
+                            id={id}
+                            name={name}
+                            types={types}
+                            img={img}/>
+                            )}
+                    </div>
+                    <Paginator 
+                    itemsPerPage={itemsPerPage}
+                    totalPokemons={pokemons.length}
+                    changePage={changePage}
+                    />
+                    </>
+                }
             </div>
         </div>
         </>

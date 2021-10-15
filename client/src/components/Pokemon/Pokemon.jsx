@@ -1,16 +1,15 @@
 import React from "react";
-import './Pokemon.css';
 import {Link} from "react-router-dom";
+import "../Styles/Pokemon.css";
+
 
 export default function Pokemon({id, img, name, types}) {
     
     return (
         <div key={id} className='pokemoncard'>
-            <Link to={`/${name}`}>
+            <Link to={`/${id}`}>
             <img src={img} alt='img' className='img'/>
-            
-            <p className='p'>{name}</p>
-            
+            <p className='p'><b>{name}</b></p>
             <p className='p'>{types}</p>
             </Link>
         </div>

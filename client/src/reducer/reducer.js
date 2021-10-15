@@ -3,8 +3,9 @@ import { attackAsc, attackDesc, fromAtoZ, fromZtoA } from "../helpers";
 
 const initialState = {
     pokemons: [],
-    search: {found:[], loading: false, notfound: ''},
-    pokemonCreated: '',
+    search: {found:[], loading:false, notfound: ''},
+    loading: false,
+    pokemonCreated: {id:'', result: false},
     pokemonLoaded: [],
     pokemonsCopy: [],
     filtered: [],
@@ -16,27 +17,43 @@ const rootReducer = (state = initialState, action = {}) => {
     switch (action.type) {
         case "ADD_ITEMS": return {
             ...state,
+            loading: false,
             pokemons: action.payload,
             pokemonsCopy: action.payload
         }
         case "SAVED": return {
             ...state,
-            pokemonCreated: action.payload
+            pokemonCreated: {
+                id: action.payload,
+                result: true
+            }
+        }
+        case "CLEAN_RESULT": return {
+            ...state,
+            pokemonCreated: {
+                id: '',
+                result: false
+            }
         }
         case "LOAD_POKEMON": return {
             ...state,
+            loading: false,
             pokemonLoaded: action.payload
         }
         case "ADD_TYPES": return {
             ...state,
             types: action.payload
         }
+        case "LOADING": return {
+            ...state,
+            loading: true
+        }
         case "SEARCHING": return {
             ...state,
             search: {
                 loading: true,
                 found: [],
-                notfound: ''
+                notfound: action.payload
             }
         }
         case "NOT_FOUND": return {
