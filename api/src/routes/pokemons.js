@@ -1,9 +1,7 @@
-var express = require('express');
-var router = express.Router();
+var router = require('express').Router();
 const { Pokemon, Type } = require('../db.js');
 const fetch = require('cross-fetch');
-const {response} = require('express');
-const {url_image, url_Base, url_40Items} = require('./auxs');
+const {url_image, url_40Items} = require('./auxs');
 
 
 router.get('/', async (req, res) => {

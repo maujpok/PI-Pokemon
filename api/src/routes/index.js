@@ -1,7 +1,7 @@
-const { Router } = require('express');  
+const router = require('express').Router();  
 const pokemonsRoutes = require('./pokemons.js');
 const typesRoutes = require('./types.js');
-const router = Router();
+
 
 
 // Configurar los routers

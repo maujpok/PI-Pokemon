@@ -22,7 +22,6 @@ const { conn, Type } = require('./src/db.js');
 const fetch = require('cross-fetch');
 const { response } = require('express');
 const url = `https://pokeapi.co/api/v2/type/`;
-const pruebaURL = 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=2';
 
 
 conn.sync({ force: true, alter: false })
@@ -32,7 +31,6 @@ conn.sync({ force: true, alter: false })
 
       const pokemonTypes = await fetch(url)
         .then(response => response.json())
-        // .then(data => console.log(data))
         .then(data => data.results.map(e => {
           return Type.create({
             name: e.name
